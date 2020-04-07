@@ -13,22 +13,22 @@
  extern "C" {
 #endif
 
+#define ONEWIRE_CMD_READROM			0x33
+#define ONEWIRE_CMD_SKIPROM			0xcc
+
 #include <stddef.h>
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
 
-#define DELAY		50
-#define F_CPU 		168000000UL
-#define F_CPU_MHZ 	(F_CPU/1000000UL)
 
-#define ONEWIRE_DATA_Pin			GPIO_PIN_1
-#define ONEWIRE_DATA_GPIO_Port		GPIOA
+#ifndef ONEWIRE_DATA_Pin
+ #define ONEWIRE_DATA_Pin			GPIO_PIN_1
+#endif
 
-#define ONEWIRE_CMD_READROM			0x33
-#define ONEWIRE_CMD_READSCRATCH		0xbe
+#ifndef ONEWIRE_DATA_GPIO_Port
+ #define ONEWIRE_DATA_GPIO_Port		GPIOA
+#endif
 
-void DS_Delay_us(uint32_t time);
-void DS_Delay_init(void);
 
 void oneWire_initDataPortAsRead();
 void oneWire_initDataPortAsWrite();

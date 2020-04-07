@@ -5,57 +5,10 @@
  *      Author: Daniel
  */
 
-#include "OneWire.h"
+#include "DS_OneWire.h"
 
-void convertT(char *str, uint16_t *data) {
-	str[0] = *data / 1000 + 48;						// t
-	str[1] = (*data % 1000) / 100 + 48;				// h
-	str[2] = ((*data % 1000) % 100) / 10 + 48;		// z
-	str[3] = (((*data % 1000) % 100) % 10) + 48;	// e
-}
+#include "DS_Delay.h"
 
-void convert(char *str, uint16_t *data) {
-	char tmp[4];
-	uint8_t flags = 0;
-	uint8_t ptrOfStr = 0;
-	// Ganzzahlen
-	uint16_t gz = (*data & 0x0ff0) >> 4;
-	convertT(tmp, &gz);
-
-	str[ptrOfStr++] = '+';
-
-	// ersetze führenden '0' mit DEL
-	for (size_t idx = 0; idx < 4; idx++) {
-		if (tmp[idx] != '0' || flags & 0x01 || idx == 3) {
-			str[ptrOfStr++] = tmp[idx];
-			flags |= 0x01;
-		}
-	}
-
-	// kommazahlen
-	uint16_t k = (*data & 0xf) * 625;
-
-	if (k) {
-		convertT(tmp, &k);
-
-		str[ptrOfStr++] = ',';
-
-		// ersetze hintere '0' mit DEL
-		for (size_t idx = 3; idx <= 3; idx--) {
-			if (tmp[idx] == '0') { tmp[idx] = 0x7f; }
-			else { break; }
-		}
-
-		for (size_t idx = 0; idx < 4; idx++) {
-			if (tmp[idx] == 0x7f) { break; }
-			str[ptrOfStr++] = tmp[idx];
-		}
-	}
-	//str[ptrOfStr++] = ' ';
-	str[ptrOfStr++] = 0xb0; // °
-	str[ptrOfStr++] = 'C';
-	str[ptrOfStr++] = 0x00;
-}
 
 void oneWire_readTemp(char *str){
 	uint8_t scratch[9];
@@ -69,8 +22,18 @@ void oneWire_readTemp(char *str){
 }
 
 void oneWire_readScratchpad(uint8_t *scratch){
-//	uint8_t scratch[9];
-	oneWire_writeByte(ONEWIRE_CMD_READSCRATCH);
+	oneWire_init();
+	oneWire_writeByte(0xcc);
+	oneWire_writeByte(0xbe);
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
+//	oneWire_readByte();
 	for(uint8_t idx = 0; idx < 9; idx++)
 		scratch[idx] = oneWire_readByte();
 }
@@ -197,6 +160,7 @@ void oneWire_initDataPortAsWrite() {
 
 void oneWire_initIO()
 {
+	DS_Delay_init();
 	// set data-port as output
 	oneWire_initDataPortAsWrite();
 
@@ -211,6 +175,9 @@ void oneWire_initIO()
 uint8_t oneWire_init() {
 	uint8_t res = 0;
 	oneWire_initDataPortAsWrite();
+
+	HAL_GPIO_WritePin(ONEWIRE_DATA_GPIO_Port, ONEWIRE_DATA_Pin, GPIO_PIN_SET);
+	DS_Delay_us(10);
 
 	// set data-port low
 	HAL_GPIO_WritePin(ONEWIRE_DATA_GPIO_Port, ONEWIRE_DATA_Pin, GPIO_PIN_RESET);
@@ -233,41 +200,5 @@ uint8_t oneWire_init() {
 		return 1;
 }
 
-// DWT-Einheit aktivieren
-void DWT_Enable() {
-  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-}
-// Takt-Zähler - Messen der Anzahl der Befehle des Prozessors:
-void DWT_CycCounterEn() {
-  DWT->CTRL = 0x40000001;
-}
-void DWT_CycCounterDis() {
-  DWT->CTRL = 0x40000000;
-}
-uint32_t DWT_CycCounterRead() {
-  return DWT->CYCCNT;
-}
-void DWT_CycCounterClear() {
-  DWT->CYCCNT = 0;
-}
-
-
-void DS_Delay_init() {
-	DWT_Enable();
-}
-
-void DS_Delay_us(uint32_t time) {
-	uint32_t fCpuMhz = HAL_RCC_GetHCLKFreq();
-	fCpuMhz/=1000000;
-	time--;
-	uint32_t iZ = 0;
-	DWT_CycCounterEn(); // Zähler aktivieren
-	DWT_CycCounterClear(); // Zähler löschen
-
-	iZ = DWT_CycCounterRead(); // Zähler auslesen
-
-	while((iZ/fCpuMhz) < time)
-		iZ = DWT_CycCounterRead();
-}
 
 
