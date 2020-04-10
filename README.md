@@ -3,6 +3,10 @@ A Library for µC's.
 Currently only for STM32fx Processors and based on STM-HAL-Library!
 The examples are all tested with STM32f4 discovery board
 
+[DS_Delay](#DS_Delay)  
+[OneWire](#OneWire)  
+[DS18x20](#DS18x20)  
+
 ---
 
 ## DS_Delay
@@ -35,7 +39,7 @@ DS_Delay_us(500); // wait 500µs
 
 ---
 
-## One Wire
+## OneWire
 ### defines
 ```c++
 #define ONEWIRE_CMD_READROM			0x33
