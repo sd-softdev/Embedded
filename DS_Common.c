@@ -1,19 +1,11 @@
 /*
- * DS_DS18x20.c
+ * Common.c
  *
- *  Created on: 07.04.2020
+ *  Created on: 10.04.2020
  *      Author: Daniel
  */
 
-#include "DS_DS18x20.h"
-
-void DS18x20_convertTemp(uint64_t *romId) {
-	oneWire_init();
-	if(*romId == 0x00) {
-		oneWire_writeByte(ONEWIRE_CMD_SKIPROM);
-	}
-	oneWire_writeByte(ONEWIRE_CMD_CONVERTT);
-}
+#include "DS_Common.h"
 
 void convertT(char *str, uint16_t *data) {
 	str[0] = *data / 1000 + 48;						// t
