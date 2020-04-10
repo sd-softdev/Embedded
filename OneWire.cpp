@@ -94,7 +94,7 @@ void OneWire::InitDataPortAsRead() {
 	GPIO_InitTypeDef GPIO_InitStruct = {0};
 	GPIO_InitStruct.Pin = this->DataPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = this->ExternalPullUp ? GPIO_NOPULL : GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(this->DataPort, &GPIO_InitStruct);
 }
@@ -104,7 +104,7 @@ void OneWire::InitDataPortAsWrite() {
 	GPIO_InitStruct.Pin = this->DataPin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	// GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Pull = this->ExternalPullUp ? GPIO_NOPULL : GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(this->DataPort, &GPIO_InitStruct);
 }

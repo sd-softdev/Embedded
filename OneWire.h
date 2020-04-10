@@ -50,6 +50,7 @@ public:
 	uint32_t ErrorPin;
 	GPIO_TypeDef *ErrorPort;
 	bool ParasitePower = false;
+	bool ExternalPullUp = false;
 
 	void InitPresencePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 	bool IsPresent = false;
