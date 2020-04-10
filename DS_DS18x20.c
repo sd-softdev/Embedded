@@ -26,6 +26,12 @@ void convert(char *str, uint16_t *data) {
 	char tmp[4];
 	uint8_t flags = 0;
 	uint8_t ptrOfStr = 0;
+
+	while(ptrOfStr < 12)
+		str[ptrOfStr++] = ' ';
+
+	ptrOfStr = 0;
+
 	// Ganzzahlen
 	uint16_t gz = (*data & 0x0ff0) >> 4;
 	convertT(tmp, &gz);
