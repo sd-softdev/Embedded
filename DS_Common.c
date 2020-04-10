@@ -57,8 +57,7 @@ void convert(char *str, uint16_t *data) {
 			str[ptrOfStr++] = tmp[idx];
 		}
 	}
-	//str[ptrOfStr++] = ' ';
-	str[ptrOfStr++] = 0xb0; // °
+	str[ptrOfStr++] = 'd'; //r0xb0; // °
 	str[ptrOfStr++] = 'C';
 	str[ptrOfStr++] = 0x00;
 }
