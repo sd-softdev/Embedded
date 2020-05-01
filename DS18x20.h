@@ -13,7 +13,6 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <exception>
 #include "stm32f4xx_hal.h"
 #include "DS_Common.h"
 #include "OneWire.h"
