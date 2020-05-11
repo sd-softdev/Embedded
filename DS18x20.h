@@ -14,7 +14,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "stm32f4xx_hal.h"
-#include "DS_Common.h"
+#include "DS_Common.hpp"
 #include "OneWire.h"
 
 using namespace SD_Utils;
