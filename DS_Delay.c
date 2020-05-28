@@ -43,3 +43,9 @@ void DS_Delay_us(uint32_t time) {
 	while((iZ/fCpuMhz) < time)
 		iZ = DWT_CycCounterRead();
 }
+
+
+void DS_Delay_ms(uint32_t time) {
+	while(time--)
+		DS_Delay_us(1000);
+}
