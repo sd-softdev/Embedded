@@ -1,95 +1,54 @@
 /*
- * ESP8266.h
+ * ESP8266.hpp
  *
- *  Created on: May 1, 2020
+ *  Created on: May 26, 2020
  *      Author: Daniel
  */
 
 #ifndef UTILS_ESP8266_HPP_
 #define UTILS_ESP8266_HPP_
 
-#ifndef ESP8266_RX_BUF_SIZE
- #define ESP8266_RX_BUF_SIZE 	1024
-#endif
-
 #include "DS_Common.hpp"
-#include "BaseObject.hpp"
+#include "UART.hpp"
 
-#include <string>
-#include <stddef.h>
-#include <stdint.h>
-#include <regex>
 #include <vector>
 
-using std::string;
-using std::to_string;
-using std::regex;
-using std::regex_search;
-using std::cmatch;
 using std::vector;
-using std::stoul;
 
+struct ESPSTATE : UARTSTATE {
+	const uint16_t WAIT4READY_TIMEOUT 		= 0x0100UL;
+	const uint16_t WAIT4WIFISTATE_TIMEOUT 	= 0x0200UL;
+	const uint16_t WIFI_DISCONNECT 			= 0x0400UL;
+	const uint16_t WIFI_CONNECT 			= 0x0800UL;
+//	const uint8_t INVALID_CHAR_RECEIVED 	= 0x0010U;
+};
+const ESPSTATE EspState = {};
 
-// TODO include the correct hal library dynamically
-#include "stm32f4xx_hal.h"
-
-
-extern void Error_Handler(void);
-
-
-struct ESP8266AccessPoint {
-	uint8_t Channel;
+class ESP8266AccessPoint {
+	public:
+	ESP8266AccessPoint();
 	string Name;
 	string Mac;
 };
 
-class ESP8266 : public BaseObject {
+class ESP8266: public UART {
 public:
-	string IpAddress = "0.0.0.0";
-	string MacAddress = "00:00:00:00:00:00";
-	bool IsReady;
-	uint16_t receiveTimeOut = 500;	// in milliseconds
-	vector<ESP8266AccessPoint> AccessPoints;
-
-public:
-	uint8_t receivedBufRaw[ESP8266_RX_BUF_SIZE];
-	string receivedBuf;
-	string transmitBuf;
-
-//private:
 	UART_HandleTypeDef *hUart;
 	uint32_t ResetPin;
 	GPIO_TypeDef *ResetPort;
+	vector<string> AccessPoints; //(0);
 
 public:
-	ESP8266(USART_TypeDef * USART);
-	ESP8266(UART_HandleTypeDef * hUart);
+	ESP8266();
 	virtual ~ESP8266();
-	void InitCore(void);
-	void RequestSendData(uint8_t connectionId, string content);
-	void RequestCloseConnection(uint8_t connectionId);
-	void RequestSoftReset();
-	void RequestStartTcpServer(uint16_t port = 80);
-	void RequestAllowMultipleConnections();
-	void RequestDisallowMultipleConnections();
-	void RequestIpAddress();
-	void RequestConnect2Ap(string ssid, string pwd);
-	void RequestCheckConnection();
-	void RequestFirmwareVersion();
-	void RequestAllAps();
-	void UartDataReceivedCallback(void);
-	void CheckReadyResponse(void);
-	void HardwareReset(void);
-	void SetHardwareResetPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
-	UART_HandleTypeDef * GetUsartInstance(void);
-	void SetTimer(void);
-
-protected:
-	void SendRequestCore(string content);
-	void SeperateIpFromESP8266Response(string res);
-	void SeperateAcsFromESP8266Response(string res);
-	void FunctionSwitch(string res);
-	void UartSendString(string content);
+	void setHardwareResetPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+	virtual void init();
+	void hardReset();
+	void wait4ReadySync(uint32_t timeout = 5000);
+	void wait4WifiStateSync(uint32_t timeout = 1000);
+	void requestAllApsSync();
+	void connect2WifiSync(string ssid, string pwd);
+	void openTcpServerSync();
 };
 
 #endif /* UTILS_ESP8266_HPP_ */
