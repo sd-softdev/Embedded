@@ -11,11 +11,13 @@
 #include <string>
 #include <stddef.h>
 #include <stdint.h>
+#include <vector>
 
 using std::string;
+using std::vector;
 
-template <class Container>
-void str_split(const string& str, Container& cont, const string& delims = " ");
+//template <class Container>
+void str_split(const string& str, vector<string>& cont, const string& delims = " ");
 
  /* legacy */
 

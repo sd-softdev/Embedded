@@ -7,8 +7,8 @@
 
 #include "DS_Common.hpp"
 
-template <class Container>
-void str_split(const string& str, Container& cont, const string& delims)
+//template <class Container>
+void str_split(const string& str, vector<string>& cont, const string& delims)
 {
 	size_t current, previous = 0;
 	current = str.find_first_of(delims);
