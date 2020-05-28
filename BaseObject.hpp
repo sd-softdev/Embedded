@@ -10,20 +10,22 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string>
+//#include <vector>
 
-typedef enum {
-	WAIT_FOR_START			= 0x00U,
-	READY					= 0x01U,
-} EBaseObject_Sate;
+using std::string;
 
-typedef enum {
-	NO_ERROR				= 0x00U,
-} EBaseObject_ErrorState;
+struct BASESTATE {
+	const uint8_t ERROR					= 0x01U;	// Error detected (for more details show 'ErrorStae')
+	const uint8_t WAIT_FOR_START		= 0x02U;	// Wait for Init/Start phase or precondotions
+	const uint8_t INIT_ONGOING 			= 0x04U;	// Init sequenz is ongoing
+	const uint8_t READY					= 0x08U;	// Object is ready
+};
+const BASESTATE BaseState = {};
 
 class BaseObject {
 public:
-	EBaseObject_ErrorState ErrorCode = NO_ERROR;
-	EBaseObject_Sate State = WAIT_FOR_START;
+	uint32_t State = 0x00;
 public:
 	BaseObject();
 	virtual ~BaseObject();
