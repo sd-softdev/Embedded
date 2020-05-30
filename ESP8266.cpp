@@ -3,10 +3,6 @@
  *
  *  Created on: May 26, 2020
  *      Author: Daniel
- *
- *
- *
- *      http://stefanfrings.de/mikrocontroller_buch/Einstieg%20in%20die%20Elektronik%20mit%20Mikrocontrollern%20-%20Band%203.pdf
  */
 
 #include "ESP8266.hpp"
