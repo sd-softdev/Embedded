@@ -26,7 +26,8 @@ void DS18x20::ReadTemp(){
 	tr = tr << 8;
 	tr |= scratch[0];
 
-	convert(this->TempAsString, &tr);
+	float * t1 = 0;
+	convert(this->TempAsString, &this->TempAsFloat, &tr);
 }
 
 

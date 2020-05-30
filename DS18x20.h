@@ -31,6 +31,7 @@ public:
 	void ReadTemp();
 	OneWire_ErrorState ReadTempAndWait();
 	char TempAsString[12];
+	float TempAsFloat = 0;
 	uint64_t RomID = 0x00;
 private:
 	uint16_t ConvertTempTimeout = 750;	// in milliseconds

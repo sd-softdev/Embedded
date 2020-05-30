@@ -28,7 +28,7 @@ void convertT(char *str, uint16_t *data) {
 	str[3] = (((*data % 1000) % 100) % 10) + 48;	// e
 }
 
-void convert(char *str, uint16_t *data) {
+void convert(char* str, float* tAsF, uint16_t *data) {
 	char tmp[4];
 	uint8_t flags = 0;
 	uint8_t ptrOfStr = 0;
@@ -74,4 +74,6 @@ void convert(char *str, uint16_t *data) {
 	str[ptrOfStr++] = 'd'; //r0xb0; // °
 	str[ptrOfStr++] = 'C';
 	str[ptrOfStr++] = 0x00;
+	*tAsF = gz;
+	*tAsF += (float)k/10000;
 }

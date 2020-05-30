@@ -23,7 +23,7 @@ void str_split(const string& str, vector<string>& cont, const string& delims = "
 
 uint8_t CDC_Transmit_FS_String(char* Buf);
 void convertT(char *str, uint16_t *data);
-void convert(char *str, uint16_t *data);
+void convert(char* str, float* tAsF, uint16_t *data);
 
 
 #endif /* UTILS_DS_COMMON_HPP_ */
