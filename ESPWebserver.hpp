@@ -22,7 +22,7 @@ public:
 	virtual ~ESPWebserver();
 	virtual void init();
 	void check4IncomingRequests();
-	void httpRequestSwitch(string channel, EESP8266_Http_Req_Method method, string* route, string params = "");
+	virtual void httpRequestSwitch(string channel, EESP8266_Http_Req_Method method, string* route, string * queries, string params = "");
 };
 
 #endif /* UTILS_ESPWEBSERVER_HPP_ */
